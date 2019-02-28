@@ -11,6 +11,7 @@
  * It uses a singly-linked list to represent the set of queue elements
  */
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -135,8 +136,22 @@ bool q_insert_tail(queue_t *q, char *s)
 */
 bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
 {
-    /* You need to fix up this code. */
+    assert(bufsize >= 0);
+    if (!q || !q->head) {
+        return false;
+    }
+
+    if (sp && q->head->value) {
+        strncpy(sp, q->head->value, bufsize > 0 ? bufsize - 1 : 0);
+        strcat(sp, "\0");
+    }
+
+    list_ele_t *tmp = q->head;
     q->head = q->head->next;
+    free(tmp->value);
+    free(tmp);
+    q->size--;
+
     return true;
 }
 
