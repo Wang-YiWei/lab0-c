@@ -51,13 +51,32 @@ void q_free(queue_t *q)
  */
 bool q_insert_head(queue_t *q, char *s)
 {
-    list_ele_t *newh;
-    /* What should you do if the q is NULL? */
-    newh = malloc(sizeof(list_ele_t));
-    /* Don't forget to allocate space for the string and copy it */
-    /* What if either call to malloc returns NULL? */
+    if (!q) {
+        return false;
+    }
+
+    list_ele_t *newh = malloc(sizeof(list_ele_t));
+    if (!newh) {
+        return false;
+    }
+
+    unsigned int len_s = !s ? 0 : strlen(s);
+    newh->value = malloc((len_s + 1) * sizeof(char));
+    if (!newh->value) {
+        free(newh);
+        return false;
+    }
+
+    strncpy(newh->value, s, len_s);
+    strcat(newh->value, "\0");
     newh->next = q->head;
+
     q->head = newh;
+    if (!q->tail) {
+        q->tail = newh;
+    }
+    q->size++;
+
     return true;
 }
 
@@ -73,7 +92,37 @@ bool q_insert_tail(queue_t *q, char *s)
 {
     /* You need to write the complete code for this function */
     /* Remember: It should operate in O(1) time */
-    return false;
+    if (!q) {
+        return false;
+    }
+
+    list_ele_t *newt = malloc(sizeof(list_ele_t));
+    if (!newt) {
+        return false;
+    }
+
+    unsigned int len_s = !s ? 0 : strlen(s);
+    newt->value = malloc((len_s + 1) * sizeof(char));
+    if (!newt->value) {
+        free(newt);
+        return false;
+    }
+
+    strncpy(newt->value, s, len_s);
+    strcat(newt->value, "\0");
+    newt->next = NULL;
+
+    if (!q->tail) {
+        q->tail->next = newt;
+    }
+    q->tail = newt;
+
+    if (!q->head) {
+        q->head = newt;
+    }
+    q->size++;
+
+    return true;
 }
 
 /*
