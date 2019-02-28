@@ -69,7 +69,7 @@ bool q_insert_head(queue_t *q, char *s)
     }
 
     strncpy(newh->value, s, len_s);
-    strcat(newh->value, "\0");
+    (newh->value)[len_s] = '\0';
     newh->next = q->head;
 
     q->head = newh;
@@ -110,7 +110,7 @@ bool q_insert_tail(queue_t *q, char *s)
     }
 
     strncpy(newt->value, s, len_s);
-    strcat(newt->value, "\0");
+    (newt->value)[len_s] = '\0';
     newt->next = NULL;
 
     if (!q->tail) {
@@ -142,8 +142,9 @@ bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
     }
 
     if (sp && q->head->value) {
-        strncpy(sp, q->head->value, bufsize > 0 ? bufsize - 1 : 0);
-        strcat(sp, "\0");
+        unsigned int copy_len = bufsize > 0 ? bufsize - 1 : 0;
+        strncpy(sp, q->head->value, copy_len);
+        sp[copy_len] = '\0';
     }
 
     list_ele_t *tmp = q->head;
