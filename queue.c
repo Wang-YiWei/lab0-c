@@ -145,7 +145,6 @@ bool q_insert_tail(queue_t *q, char *s)
 */
 bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
 {
-    assert(bufsize >= 0);
     if (!q || !q->head) {
         return false;
     }
